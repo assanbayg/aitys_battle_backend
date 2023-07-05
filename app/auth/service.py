@@ -1,5 +1,5 @@
 import os
-from dotenv import getenv
+from dotenv import load_dotenv
 from pydantic import BaseSettings
 
 from app.config import database

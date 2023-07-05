@@ -62,3 +62,6 @@ poetry install
 poetry shell
 sh ./scripts/launch.sh
 ```
+
+## Fix List
+ - fix auth
