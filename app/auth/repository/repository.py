@@ -35,3 +35,18 @@ class AuthRepository:
             }
         )
         return user
+
+    def update_user(self, user_id: str, data: dict):
+        self.database["users"].update_one(
+            filter={"_id": ObjectId(user_id)},
+            update={
+                "$set": {
+                    "phone": data["phone"],
+                    "name": data["name"],
+                    "city": data["city"],
+                }
+            },
+        )
+
+    def delete_user_by_id(self, user_id: str):
+        return self.database["users"].delete_one({"_id": ObjectId(user_id)})
