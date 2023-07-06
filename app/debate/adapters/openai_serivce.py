@@ -149,7 +149,7 @@ def generate_agent_description(name: str, topic: str, word_limit: int) -> str:
         ),
         HumanMessage(
             content=f"""{conversation_description}
-            Please reply with a creative description of {name}, in {word_limit} words or less.
+            Please reply with a creative description of {name}, in {word_limit} words or less. 
             Speak directly to {name}.
             Describe their point of view on the topic based on their real-life opinion on the topic.
             If they don't have an opinion on something, {name} should answer 'I am not familiar with this topic'.
@@ -195,10 +195,13 @@ Stop speaking the moment you finish speaking from your perspective.
 
 class LLMService:
     def run_dialogue_simulation(
-        topic: str,
-        names: Dict[str, List[str]],
+        topic: str = "Revolution",
+        names: Dict[str, List[str]] = {
+            "Stalin": ["arxiv", "ddg-search", "wikipedia"],
+            "Lenin": ["arxiv", "ddg-search", "wikipedia"],
+        },
         word_limit: int = 30,
-        max_iters: int = 4,
+        max_iters: int = 2,
     ) -> List[str]:
         # Generate agent descriptions
         agent_descriptions = {
