@@ -202,13 +202,11 @@ class LLMService:
         },
         word_limit: int = 30,
         max_iters: int = 2,
-    ) -> List[str]:
-        # Generate agent descriptions
+    ) -> List[Dict[str, str]]:
+        # Generate agent descriptions and system messages
         agent_descriptions = {
             name: generate_agent_description(name, topic, word_limit) for name in names
         }
-
-        # Generate agent system messages
         agent_system_messages = {
             name: generate_system_message(name, description, tools, topic)
             for (name, tools), description in zip(
@@ -242,8 +240,8 @@ class LLMService:
         # Start the conversation
         simulator.inject("System", f"The topic of conversation is: {topic}")
 
-        # Initialize list to store final replies
-        final_replies = []
+        # Initialize dictionary to store final replies
+        final_replies = {}
 
         # Run the dialogue simulation
         for _ in range(max_iters):
@@ -251,9 +249,9 @@ class LLMService:
 
             # Check if it's the final reply from an agent
             if speaker != "System":
-                final_replies.append(f"{speaker}: {message}")
+                final_replies[speaker] = message
 
             if speaker == "System" and message == "End of conversation.":
                 break
 
-        return final_replies
+        return [final_replies]
