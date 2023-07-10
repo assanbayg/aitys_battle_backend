@@ -20,5 +20,5 @@ def generate_aitys(
     second_figure: str = "Lenin",
     svc: Service = Depends(get_service),
 ):
-    response = svc.openai_serivce.run_dialogue_simulation()
+    response = svc.openai_service.run_dialogue_simulation()
     return response
