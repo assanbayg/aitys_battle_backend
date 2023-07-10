@@ -15,10 +15,17 @@ class GenerateAitysResponse(AppModel):
 @router.post("/{id}/response", status_code=status.HTTP_201_CREATED)
 def generate_aitys(
     id: str,
-    topic: str = "Revolution",
-    first_figure: str = "Stalin",
-    second_figure: str = "Lenin",
+    topic: str,
+    first_figure: str,
+    second_figure: str,
     svc: Service = Depends(get_service),
 ):
-    response = svc.openai_service.run_dialogue_simulation()
+    names = {
+        first_figure: ["arxiv", "ddg-search", "wikipedia"],
+        second_figure: ["arxiv", "ddg-search", "wikipedia"],
+    }
+    response = svc.openai_service.run_dialogue_simulation(
+        topic=topic,
+        names=names,
+    )
     return response

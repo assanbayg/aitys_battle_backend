@@ -42,7 +42,10 @@ class DialogueAgent:
         message = self.model(
             [
                 self.system_message,
-                HumanMessage(content="\n".join(self.message_history + [self.prefix])),
+                HumanMessage(
+                    content="<br/>".join(self.message_history)
+                    + "<br/>{self.name} answer this"
+                ),
             ]
         )
         return message.content
@@ -128,7 +131,9 @@ class DialogueAgentWithTools(DialogueAgent):
             ),
         )
         message = AIMessage(
-            content=agent_chain.run("\n".join([self.system_message.content]) + "\n")
+            content=agent_chain.run(
+                "<br/>".join([self.system_message.content]) + "{self.name} could answer"
+            )
         )
         # message = AIMessage(
         #     content=agent_chain.run(
@@ -195,12 +200,10 @@ Stop speaking the moment you finish speaking from your perspective.
 
 class LLMService:
     def run_dialogue_simulation(
-        topic: str = "Revolution",
-        names: Dict[str, List[str]] = {
-            "Stalin": ["arxiv", "ddg-search", "wikipedia"],
-            "Lenin": ["arxiv", "ddg-search", "wikipedia"],
-        },
-        word_limit: int = 30,
+        self,
+        topic: str,
+        names: Dict[str, List[str]],
+        word_limit: int = 15,
         max_iters: int = 2,
     ) -> List[Dict[str, str]]:
         # Generate agent descriptions and system messages
