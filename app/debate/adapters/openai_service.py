@@ -43,8 +43,8 @@ class DialogueAgent:
             [
                 self.system_message,
                 HumanMessage(
-                    content="<br/>".join(self.message_history)
-                    + "<br/>{self.name} answer this"
+                    content="\n".join(self.message_history)
+                    + "\n{self.name} answer this"
                 ),
             ]
         )
@@ -132,16 +132,9 @@ class DialogueAgentWithTools(DialogueAgent):
         )
         message = AIMessage(
             content=agent_chain.run(
-                "<br/>".join([self.system_message.content]) + "{self.name} could answer"
+                "\n".join([self.system_message.content]) + "{self.name} could answer"
             )
         )
-        # message = AIMessage(
-        #     content=agent_chain.run(
-        #         input="\n".join(
-        #             [self.system_message.content] + self.message_history + [self.prefix]
-        #         )
-        #     )
-        # )
 
         return message.content
 
