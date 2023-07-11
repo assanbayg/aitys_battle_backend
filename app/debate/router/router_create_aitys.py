@@ -1,5 +1,5 @@
 from fastapi import Depends, status
-from typing import Optional
+from typing import Optional, List
 
 from app.utils import AppModel
 
@@ -15,20 +15,33 @@ class CreateAitysRequest(AppModel):
     topic: str
     first_figure: str
     second_figure: str
+    replies: List = []
 
 
 class CreateAitysResponse(AppModel):
-    id: Optional[str]
+    replies: List
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create_aitys(
     input: CreateAitysRequest,
-    # jwt_data: JWTData = Depends(parse_jwt_user_data),
     svc: Service = Depends(get_service),
 ):
-    created_aitys_id = svc.repository.create_aitys(
-        # jwt_data.user_id,
-        input.dict(),
+    names = {
+        input.first_figure: ["arxiv", "ddg-search", "wikipedia"],
+        input.second_figure: ["arxiv", "ddg-search", "wikipedia"],
+    }
+    response = svc.openai_service.run_dialogue_simulation(
+        topic=input.topic,
+        names=names,
     )
-    return CreateAitysResponse(id=created_aitys_id)
+    updated_input = CreateAitysRequest(
+        topic=input.topic,
+        first_figure=input.first_figure,
+        second_figure=input.second_figure,
+        replies=response,
+    )
+    created_aitys_id = svc.repository.create_aitys(
+        updated_input.dict(),
+    )
+    return CreateAitysResponse(replies=created_aitys_id)
