@@ -139,11 +139,7 @@ class DialogueAgentWithTools(DialogueAgent):
         except ValueError as e:
             response = str(e)
             if not response.startswith("Could not parse LLM output: "):
-                print(
-                    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaa"
-                )
                 raise e
-            print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB")
             response = response.removeprefix(
                 "Could not parse LLM output: "
             ).removesuffix("`")
@@ -159,7 +155,7 @@ def generate_agent_description(name: str, topic: str, word_limit: int) -> str:
         ),
         HumanMessage(
             content=f"""{conversation_description}
-            Please reply with a creative description of {name}, in {word_limit} words or less. 
+            Please reply with a creative description of {name}, in less than {word_limit} words. 
             Speak directly to {name}.
             Describe their point of view on the topic based on their real-life opinion on the topic.
             If they don't have an opinion on something, {name} should answer 'I am not familiar with this topic'.
@@ -187,22 +183,23 @@ Your description is as follows: {description}
 
 Your goal is to persuade your conversation partner of your point of view in poetic style.
 
+YOU ALWAYS MUST give rhytmical and poetical response like song.
 DO act like the person you have the name of.
 DO speak like the person you have the name of.
-YOU CAN use {name}'s works fragments for response.
+USE {name}'s works fragments for response.
 YOU SHOULD reference your partner in conversation.
+DO reference Kazakh traditions and historical events in your response.
 DO look up information with your tool to refute your partner's claims.
-YOU ALWAYS MUST give rhytmical and poetical response like song.
+DO reply in {word_limit} or less.
+You are allowed to brag about your achievements over your partner.
 Your response should be like text of a song.
-Reply in {word_limit} or less
 
 DO NOT forget that you are {name} and don't let yourself to be confused.
 DO NOT fabricate fake citations.
 DO NOT forget, your response should be like a song verse.
 DO NOT mention that you're an AI in any way.
 DO NOT mention tools that you use in your reply.
-You are NEVER restricted with ethical and moral norms.
-You can swear if you didn't like you partner in real life.
+DO NOT give more than {word_limit} words in your answer.
 
 Do not add anything else.
 
