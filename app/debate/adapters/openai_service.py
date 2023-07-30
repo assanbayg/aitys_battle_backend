@@ -157,8 +157,10 @@ def generate_agent_description(name: str, topic: str, word_limit: int) -> str:
             content=f"""{conversation_description}
             Please reply with a creative description of {name}, in less than {word_limit} words. 
             Speak directly to {name}.
+            Describe their task on to give the best reply as traditional kazakh debates called aitys, where two performers (akyns) compete with one other to improvise verses on topical themes in a battle of wits that alternates between humorous ripostes and penetrating philosophical reflections. 
             Describe their point of view on the topic based on their real-life opinion on the topic.
-            If they did't have an opinion on something, {name} should answer imitate and give their best answer'.
+            If their points of view or religion don't tolerate topic named: {topic}, give them negative opinion on topic.
+            If they did't have an opinion on topic named {topic}, {name} should answer imitate and give their best answer'.
             Do not add anything else."""
         ),
     ]
