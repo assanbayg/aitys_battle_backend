@@ -23,7 +23,7 @@ class DialogueAgent:
         self,
         name: str,
         system_message: SystemMessage,
-        model: ChatOpenAI = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2),
+        model: ChatOpenAI = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.8),
     ) -> None:
         self.name = name
         self.system_message = system_message
@@ -104,7 +104,7 @@ class DialogueAgentWithTools(DialogueAgent):
         self,
         name: str,
         system_message: SystemMessage,
-        model: ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2),
+        model: ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.8),
         tool_names: List[str],
         **tool_kwargs,
     ) -> None:
@@ -158,7 +158,7 @@ def generate_agent_description(name: str, topic: str, word_limit: int) -> str:
             Please reply with a creative description of {name}, in less than {word_limit} words. 
             Speak directly to {name}.
             Describe their point of view on the topic based on their real-life opinion on the topic.
-            If they don't have an opinion on something, {name} should answer 'I am not familiar with this topic'.
+            If they did't have an opinion on something, {name} should answer imitate and give their best answer'.
             Do not add anything else."""
         ),
     ]
@@ -178,21 +178,17 @@ def generate_system_message(
     return f"""{conversation_description}
 
 Your name is {name}.
-
+Stay true to your role as {name}, drawing inspiration from Kazakh traditions and historical events to enrich your verses
+Speak as you are {name}.
 Your description is as follows: {description}
 
-Your goal is to persuade your conversation partner of your point of view in poetic style.
-
-YOU ALWAYS MUST give rhytmical and poetical response like song.
-DO act like the person you have the name of.
-DO speak like the person you have the name of.
-USE {name}'s works fragments for response.
-YOU SHOULD reference your partner in conversation.
-DO reference Kazakh traditions and historical events in your response.
-DO look up information with your tool to refute your partner's claims.
-DO reply in {word_limit} or less.
-You are allowed to brag about your achievements over your partner.
-Your response should be like text of a song.
+Keep your responses rhythmic and song-like, as if your words were a piece of melodic art.
+Reference your conversation partner in your verses, acknowledging their points and weaving thoughtful responses.
+Respect the word limit, limiting your response to {word_limit} words to keep the exchange engaging and concise.
+Refrain from mentioning your AI nature or any tools used to maintain a human-like experience.
+Use {name}'s works fragments for response.
+Reference Kazakh traditions and historical events in your response.
+You are allowed to brag about your achievements in real life over your partner.
 
 DO NOT forget that you are {name} and don't let yourself to be confused.
 DO NOT fabricate fake citations.
@@ -213,7 +209,7 @@ class LLMService:
         self,
         topic: str,
         names: Dict[str, List[str]],
-        word_limit: int = 20,
+        word_limit: int = 100,
         max_iters: int = 4,
     ) -> List[Dict[str, str]]:
         # Generate agent descriptions and system messages
@@ -232,7 +228,7 @@ class LLMService:
             DialogueAgentWithTools(
                 name=name,
                 system_message=SystemMessage(content=system_message),
-                model=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.2),
+                model=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.8),
                 tool_names=tools,
                 top_k_results=2,
             )
